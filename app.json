@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "2ca80036-2b87-4eba-b7b0-980100832c59"
+      }
+    },
+    "android": {
+      "package": "com.sk_nagar790.backend"
+    }
+  }
+}

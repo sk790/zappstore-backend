@@ -43,7 +43,7 @@ export const login = async (req, res) => {
 };
 
 export const updateProfile = async (req, res) => {
-  const { name, email, password, mobile } = req.body;
+  const { fullName, email, password, mobile,address } = req.body;
   try {
     const user = await User.findOne({ mobile });
 
@@ -51,9 +51,10 @@ export const updateProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    user.name = name || user.name;
+    user.fullName = fullName || user.fullName;
     user.email = email || user.email;
     user.password = password || user.password;
+    user.address = address || user.address;
 
     await user.save();
 

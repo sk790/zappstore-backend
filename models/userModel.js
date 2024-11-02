@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: ["user", "sp"],
     },
-    location: {
+    address: {
       type: String,
     },
     profile: {

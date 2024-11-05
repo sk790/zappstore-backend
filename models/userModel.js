@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 
-const userSchema = mongoose.Schema(
+const userSchema = new Schema(
   {
     fullName: {
       type: String,
@@ -21,6 +22,7 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       enum: ["user", "sp"],
+      required: true,
     },
     address: {
       type: String,
@@ -32,6 +34,8 @@ const userSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    service: { type: Schema.Types.ObjectId, ref: "Service" },
+    bookedServices: { type: Schema.Types.ObjectId, ref: "Booking" },
   },
   {
     timestamps: true,

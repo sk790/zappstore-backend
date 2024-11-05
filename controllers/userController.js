@@ -43,7 +43,7 @@ export const login = async (req, res) => {
 };
 
 export const updateProfile = async (req, res) => {
-  const { fullName, email, password, mobile,address } = req.body;
+  const { fullName, email, password, mobile, address } = req.body;
   try {
     const user = await User.findOne({ mobile });
 
@@ -59,6 +59,19 @@ export const updateProfile = async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: "Profile updated successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getProfile = async (req, res) => {
+  const { mobile } = req.body;
+  try {
+    const user = await User.findOne({ mobile }).populate("service");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "Profile fetched successfully", user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -24,7 +24,10 @@ const userSchema = new Schema(
       required: true,
     },
     address: {
-      type: String,
+      type: Object,
+    },
+    location: {
+      type: Object,
     },
     profile: {
       type: String,

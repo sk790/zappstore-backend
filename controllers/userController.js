@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 
 export const signup = async (req, res) => {
-  const { mobile, password, role } = req.body;
+  const { mobile, password, role, address } = req.body;
   console.log(req.body);
 
   if (!mobile || !password) {
@@ -16,7 +16,7 @@ export const signup = async (req, res) => {
   }
 
   try {
-    const user = await User.create({ mobile, password, role });
+    const user = await User.create({ mobile, password, role, address });
     res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -76,3 +76,21 @@ export const getProfile = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const updateLocation = async (req,res)=>{
+  const {coords, mobile} = req.body;
+  if(!coords){
+    return res.status(400).json({ message: "All fields are required" });
+  }
+  try {
+    const user = await User.findOne({ mobile });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.location = coords;
+    await user.save();
+    res.status(200).json({ message: "Location updated successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}

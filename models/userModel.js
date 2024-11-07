@@ -34,7 +34,6 @@ const userSchema = new Schema(
       },
       coordinates: {
         type: [Number], // [longitude, latitude]
-        required: true,
       },
     },
     profile: {

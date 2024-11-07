@@ -87,8 +87,11 @@ export const updateLocation = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (!user.location) {
+    if (user.role === "user") {
       user.location = coords;
+    }
+    if(user.role === "sp" && !user.location){
+      user.location = coords
     }
     await user.save();
     res.status(200).json({ message: "Location updated successfully", user });

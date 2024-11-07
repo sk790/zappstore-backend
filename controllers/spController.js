@@ -1,16 +1,18 @@
 import Service from "../models/serviceModel.js";
 
 export const getSp = async (req, res) => {
-  const { service } = req.body;
+  const { service, coords } = req.body;
   try {
-    const sp = await Service.find({ serviceType: service }).populate(
-      "provider"
-    );
-    if (!sp) {
-      return res.status(404).json({ message: "Service not found" });
-    }
-    res.status(200).json({ message: "SP fetched successfully", sp });
+    const nearbyProviders = await Service.find({
+      location: {
+        $geoWithin: {
+          $centerSphere: [[coords.longitude, coords.latitude], 10 / 6378.1], // Radius in radians (10 km / Earth's radius)
+        },
+      },
+      serviceType: service,
+    });
+    return res.status(200).json({ sp: nearbyProviders });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };

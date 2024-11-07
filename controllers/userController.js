@@ -100,3 +100,6 @@ export const updateLocation = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// long = 77.5400566
+//  lat = 29.970137

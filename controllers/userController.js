@@ -77,29 +77,20 @@ export const getProfile = async (req, res) => {
   }
 };
 
-export const updateLocation = async (req, res) => {
-  console.log(req.body);
-  
-  const { coords, mobile } = req.body;
-  if (!coords) {
-    return res.status(400).json({ message: "All fields are requiredssssssss" });
+export const updateLocation = async (req,res)=>{
+  const {coords, mobile} = req.body;
+  if(!coords){
+    return res.status(400).json({ message: "All fields are required" });
   }
   try {
     const user = await User.findOne({ mobile });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    user.location.coordinates = [
-      coords.longitude,
-      coords.latitude,
-    ];
-    user.location.type = "Point";
+    user.location = coords;
     await user.save();
     res.status(200).json({ message: "Location updated successfully", user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
-
-// long = 77.5400566
-//  lat = 29.970137
+}

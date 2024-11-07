@@ -1,4 +1,4 @@
-import Service from "../models/serviceModel";
+import Service from "../models/serviceModel.js";
 
 export const getSp = async (req, res) => {
   const { service } = req.body;

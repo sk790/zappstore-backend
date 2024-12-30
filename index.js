@@ -1,6 +1,9 @@
 import express from "express";
 import connectDB from "./config/db.js";
+import dotenv from "dotenv";
 import cors from "cors";
+dotenv.config();
+import cookieParser from "cookie-parser";
 
 import userRoute from "./routes/userRoutes.js";
 import serviceRoute from "./routes/serviceRoute.js";
@@ -8,11 +11,9 @@ import spRoute from "./routes/spRoute.js";
 
 const app = express();
 
-import dotenv from "dotenv";
-dotenv.config();
-
 connectDB();
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/user", userRoute);
 app.use("/api/service", serviceRoute);

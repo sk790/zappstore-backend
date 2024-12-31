@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "build": "npm install"
+    "build": "echo 'No build step needed for Node.js backend'"
   },
   "author": "",
   "license": "ISC",

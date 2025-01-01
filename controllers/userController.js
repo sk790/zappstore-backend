@@ -12,12 +12,14 @@ const client = twilio(accountSID, authToken);
 
 export const sendOtp = async (req, res) => {
   const { phone } = req.body;
-  console.log(phone);
-
   if (!phone) {
     return res.status(400).json({ message: "All fields are required" });
   }
   try {
+    const user = await User.findOne({ phone });
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
+    }
     const isExistTempUser = await TempUser.findOne({ phone });
     if (isExistTempUser) {
       return res.status(400).json({
@@ -69,42 +71,12 @@ export const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: "Invalid OTP" });
     }
     const user = await User.create({ phone, password });
+    // console.log(user._id);
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
     await TempUser.findByIdAndDelete(tempUser._id);
-    res.status(200).json({ message: "OTP verified successfully", user });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-export const signup = async (req, res) => {
-  const { phone, password } = req.body;
-
-  if (!phone || !password) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-
-  try {
-    // check if user already exists
-    const duplicate = await User.findOne({ phone });
-
-    if (duplicate) {
-      return res.status(400).json({ message: "mobile already exists" });
-    }
-    const isExistTempUser = await TempUser.findOne({ phone });
-    if (isExistTempUser) {
-      return res.status(400).json({
-        message: "Your have already sent otp please try after some time.",
-      });
-    }
-    const tempUser = await TempUser.create({ phone });
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    await TempUser.findByIdAndUpdate(tempUser.id, { otp });
-    res.status(200).json({ message: "OTP sent successfully" });
-
-    // const user = await User.create({ phone, password });
-    // const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-    //   expiresIn: "7d",
-    // });
-    const token = "bubjb";
     res
       .status(200)
       .cookie("zapp_access_token", token, {
@@ -116,7 +88,6 @@ export const signup = async (req, res) => {
       .json({
         success: true,
         message: "User created successfully",
-        // user,
         token,
       });
   } catch (error) {
@@ -186,7 +157,7 @@ export const getProfile = async (req, res) => {
       .populate("service")
       .select("-password");
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found.." });
     }
     res.status(200).json({ message: "Profile fetched successfully", user });
   } catch (error) {

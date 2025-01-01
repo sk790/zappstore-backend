@@ -11,7 +11,7 @@ export const addService = async (req, res) => {
   }
   const user = await User.findById(req.user.id);
   if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    return res.status(404).json({ message: "User not found..." });
   }
   try {
     const service = await Service.create({
@@ -50,10 +50,12 @@ export const addCategory = async (req, res) => {
 export const getCategories = async (req, res) => {
   try {
     const categories = await Category.find();
-    res
+    console.log(categories);
+
+    return res
       .status(200)
       .json({ message: "Categories fetched successfully", categories });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };

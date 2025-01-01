@@ -6,9 +6,7 @@ const serviceSchema = new Schema(
     provider: { type: Schema.Types.ObjectId, ref: "User", required: true },
     serviceName: { type: String, required: true },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
+      type: String,
     },
     location: {
       lat: { type: Number, required: true },
